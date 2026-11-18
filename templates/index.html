@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="hero">
+  <h1>🐾 Welcome to Paws & Claws Veterinary</h1>
+  <p>Professional care for your furry, feathered and scaled friends.</p>
+  <a href="/appointments" class="cta">📅 Book an Appointment</a>
+</div>
+
+<div class="stats">
+  <div class="stat-card"><h2>{{ pet_count }}</h2><p>Registered Pets</p></div>
+  <div class="stat-card"><h2>{{ appt_count }}</h2><p>Appointments</p></div>
+  <div class="stat-card"><h2>{{ vet_count }}</h2><p>Vets on Staff</p></div>
+</div>
+
+<div class="card">
+  <h2>⏳ Upcoming Appointments</h2>
+  {% if upcoming %}
+    <ul class="list">
+      {% for a in upcoming %}
+        <li>
+          <strong>{{ a.pet.name if a.pet else 'Unknown' }}</strong> —
+          {{ a.date }} at {{ a.time }} — {{ a.reason }}
+          <span class="badge pending">{{ a.status }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No upcoming appointments. 🎉</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>💡 Services</h2>
+  <div class="services">
+    <div class="service"><h3>🩺 Checkups</h3><p>Routine health exams for all pets.</p></div>
+    <div class="service"><h3>💉 Vaccinations</h3><p>Keep your pets protected.</p></div>
+    <div class="service"><h3>🦷 Dentistry</h3><p>Dental cleaning and oral care.</p></div>
+    <div class="service"><h3>✂️ Surgery</h3><p>Advanced surgical procedures.</p></div>
+  </div>
+</div>
+
+{% endblock %}

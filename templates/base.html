@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐾 Paws & Claws Veterinary</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav>
+  <div class="brand">🐾 Paws & Claws</div>
+  <div class="links">
+    <a href="/">Home</a>
+    <a href="/pets">Pets</a>
+    <a href="/vets">Vets</a>
+    <a href="/appointments">Appointments</a>
+    {% if session.role == 'admin' %}<a href="/admin">Admin</a>{% endif %}
+    {% if session.user_id %}
+      <span class="user">👤 {{ session.username }}</span>
+      <a href="/logout" class="btn-small">Logout</a>
+    {% else %}
+      <a href="/login" class="btn-small">Login</a>
+      <a href="/register" class="btn-small">Register</a>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="flash-wrap">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+      <div class="flash {{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+</div>
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  <p>© 2026 Paws & Claws Veterinary Clinic · Built with ❤️ in Flask</p>
+</footer>
+
+</body>
+</html>

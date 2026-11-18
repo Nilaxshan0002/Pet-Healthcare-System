@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="auth-card">
+  <h1>{{ 'Create Account' if mode == 'register' else 'Login' }}</h1>
+  <form method="POST">
+    <input name="username" placeholder="Username" required>
+    <input name="password" type="password" placeholder="Password" required>
+    <button type="submit">{{ 'Register' if mode == 'register' else 'Login' }}</button>
+  </form>
+  {% if mode == 'register' %}
+    <p>Already registered? <a href="/login">Log in</a></p>
+  {% else %}
+    <p>New here? <a href="/register">Create account</a></p>
+  {% endif %}
+</div>
+
+{% endblock %}

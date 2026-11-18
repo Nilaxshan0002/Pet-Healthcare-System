@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>📅 Appointments</h1>
+
+{% if session.user_id %}
+<div class="card">
+  <h2>Book New Appointment</h2>
+  <form method="POST" action="/book">
+    <div class="grid2">
+      <select name="pet_id" required>
+        <option value="">-- Select Pet --</option>
+        {% for p in pets %}
+          <option value="{{ p.id }}">{{ p.name }} ({{ p.species }})</option>
+        {% endfor %}
+      </select>
+      <select name="vet_id">
+        <option value="">-- Any Vet --</option>
+        {% for v in vets %}
+          <option value="{{ v.id }}">{{ v.name }} - {{ v.specialty }}</option>
+        {% endfor %}
+      </select>
+      <input name="date" type="date" required>
+      <input name="time" type="time" required>
+      <input name="reason" placeholder="Reason for visit" required>
+    </div>
+    <button type="submit">📅 Book Appointment</button>
+  </form>
+</div>
+{% else %}
+<div class="card"><p>🔒 <a href="/login">Log in</a> to book.</p></div>
+{% endif %}
+
+<div class="card">
+  <h2>All Appointments ({{ appts|length }})</h2>
+  {% if appts %}
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Pet</th><th>Vet</th><th>Date</th>
+        <th>Time</th><th>Reason</th><th>Status</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in appts %}
+      <tr>
+        <td>{{ a.id }}</td>
+        <td>{{ a.pet.name if a.pet else '—' }}</td>
+        <td>{{ a.vet.name if a.vet else 'Any' }}</td>
+        <td>{{ a.date }}</td>
+        <td>{{ a.time }}</td>
+        <td>{{ a.reason }}</td>
+        <td><span class="badge {{ a.status|lower }}">{{ a.status }}</span></td>
+        <td class="actions">
+          {% if session.user_id %}
+            <a href="/appointment/{{ a.id }}/Confirmed" class="btn-sm">✅</a>
+            <a href="/appointment/{{ a.id }}/Done" class="btn-sm">✔️</a>
+            <a href="/appointment/{{ a.id }}/Cancelled" class="btn-sm">🚫</a>
+            <a href="/delete_appointment/{{ a.id }}" class="btn-sm danger"
+               onclick="return confirm('Delete?')">🗑</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No appointments yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

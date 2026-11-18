@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>🛡️ Admin Dashboard</h1>
+
+<div class="stats">
+  <div class="stat-card"><h2>{{ users|length }}</h2><p>Users</p></div>
+  <div class="stat-card"><h2>{{ pets|length }}</h2><p>Pets</p></div>
+  <div class="stat-card"><h2>{{ appts|length }}</h2><p>Appointments</p></div>
+</div>
+
+<div class="card">
+  <h2>Users</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Username</th><th>Role</th></tr></thead>
+    <tbody>
+      {% for u in users %}
+        <tr><td>{{ u.id }}</td><td>{{ u.username }}</td><td>{{ u.role }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

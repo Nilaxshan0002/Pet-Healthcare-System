@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>🐾 Manage Pets</h1>
+
+{% if session.user_id %}
+<div class="card">
+  <h2>{{ 'Edit Pet: ' + edit_pet.name if edit_pet else 'Register New Pet' }}</h2>
+  <form method="POST"
+        action="{{ '/edit_pet/' + edit_pet.id|string if edit_pet else '/add_pet' }}">
+    <div class="grid2">
+      <input name="name" placeholder="Pet name" required value="{{ edit_pet.name if edit_pet else '' }}">
+      <input name="species" placeholder="Species (dog / cat / bird)" required value="{{ edit_pet.species if edit_pet else '' }}">
+      <input name="breed" placeholder="Breed" value="{{ edit_pet.breed if edit_pet else '' }}">
+      <input name="age" type="number" placeholder="Age (years)" value="{{ edit_pet.age if edit_pet else '' }}">
+      <input name="owner" placeholder="Owner name" required value="{{ edit_pet.owner if edit_pet else '' }}">
+      <input name="notes" placeholder="Notes" value="{{ edit_pet.notes if edit_pet else '' }}">
+    </div>
+    <button type="submit">{{ '💾 Save Changes' if edit_pet else '➕ Add Pet' }}</button>
+    {% if edit_pet %}<a href="/pets" class="btn-cancel">Cancel</a>{% endif %}
+  </form>
+</div>
+{% else %}
+<div class="card"><p>🔒 Please <a href="/login">log in</a> to add or edit pets.</p></div>
+{% endif %}
+
+<div class="card">
+  <h2>All Pets ({{ pets|length }})</h2>
+  {% if pets %}
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Name</th><th>Species</th><th>Breed</th>
+        <th>Age</th><th>Owner</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in pets %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.species }}</td>
+        <td>{{ p.breed or '-' }}</td>
+        <td>{{ p.age or '-' }}</td>
+        <td>{{ p.owner }}</td>
+        <td class="actions">
+          <a href="/records/{{ p.id }}" class="btn-sm">📋 Records</a>
+          {% if session.user_id %}
+            <a href="/edit_pet/{{ p.id }}" class="btn-sm">✏️ Edit</a>
+            <a href="/delete_pet/{{ p.id }}" class="btn-sm danger"
+               onclick="return confirm('Delete {{ p.name }}?')">🗑 Delete</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No pets yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

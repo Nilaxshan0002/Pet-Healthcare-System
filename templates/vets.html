@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>👨‍⚕️ Our Veterinarians</h1>
+
+{% if session.role == 'admin' %}
+<div class="card">
+  <h2>Add Vet</h2>
+  <form method="POST" action="/add_vet">
+    <input name="name" placeholder="Full name" required>
+    <input name="specialty" placeholder="Specialty" required>
+    <input name="phone" placeholder="Phone">
+    <button type="submit">➕ Add Vet</button>
+  </form>
+</div>
+{% endif %}
+
+<div class="vet-grid">
+  {% for v in vets %}
+  <div class="vet-card">
+    <h3>👨‍⚕️ {{ v.name }}</h3>
+    <p><strong>Specialty:</strong> {{ v.specialty }}</p>
+    <p><strong>Phone:</strong> {{ v.phone or '-' }}</p>
+    <p>
+      {% if v.available %}
+        <span class="badge confirmed">Available</span>
+      {% else %}
+        <span class="badge cancelled">Unavailable</span>
+      {% endif %}
+    </p>
+    {% if session.role == 'admin' %}
+      <a href="/toggle_vet/{{ v.id }}" class="btn-sm">Toggle Availability</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>📋 Medical Records — {{ pet.name }}</h1>
+<p class="muted">Species: {{ pet.species }} · Owner: {{ pet.owner }}</p>
+
+<div class="card">
+  <h2>Add Record</h2>
+  <form method="POST">
+    <div class="grid2">
+      <input name="date" type="date" required>
+      <input name="vet_name" placeholder="Vet name">
+      <input name="diagnosis" placeholder="Diagnosis" required>
+      <input name="treatment" placeholder="Treatment" required>
+    </div>
+    <button type="submit">➕ Add Record</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>History ({{ records|length }})</h2>
+  {% if records %}
+    {% for r in records %}
+      <div class="record">
+        <strong>{{ r.date }}</strong> — {{ r.diagnosis }}
+        <p class="muted">Treatment: {{ r.treatment }} · Vet: {{ r.vet_name }}</p>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No records yet.</p>
+  {% endif %}
+</div>
+
+<a href="/pets" class="btn-cancel">← Back to Pets</a>
+
+{% endblock %}
